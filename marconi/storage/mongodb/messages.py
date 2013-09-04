@@ -25,6 +25,7 @@ import datetime
 import time
 
 import pymongo.errors
+import pymongo.read_preferences
 
 import marconi.openstack.common.log as logging
 from marconi.openstack.common import timeutils
@@ -339,7 +340,10 @@ class MessageController(storage.MessageBase):
             'p': project,
         }
 
-        msgs = self._col.find(query, sort=[('k', 1)])
+        preference = pymongo.read_preferences.ReadPreference.PRIMARY
+        msgs = self._col.find(query, sort=[('k', 1)],
+                              read_preference=preference,
+                              slave_ok=False)
 
         if limit:
             msgs = msgs.limit(limit)

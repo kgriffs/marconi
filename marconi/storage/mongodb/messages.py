@@ -342,8 +342,7 @@ class MessageController(storage.MessageBase):
 
         preference = pymongo.read_preferences.ReadPreference.PRIMARY
         msgs = self._col.find(query, sort=[('k', 1)],
-                              read_preference=preference,
-                              slave_ok=False)
+                              read_preference=preference)
 
         if limit:
             msgs = msgs.limit(limit)
